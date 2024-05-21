@@ -1,0 +1,20 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"folder": {
+			"name": "nytaxidata-sql"
+		},
+		"content": {
+			"query": "-- EXEC sp_describe_first_result_set \n\nSELECT TOP 100 * FROM OPENROWSET(\n    BULK 'https://jayaeystgacc.blob.core.windows.net/azuresynapse/NYCGreenTaxiTripData-20240521T044358Z-001/NYCGreenTaxiTripData/raw/taxi_zone.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION = '2.0',\n    HEADER_ROW = TRUE,\n    FIELDTERMINATOR = ','\n) WITH (\n    LocationID SMALLINT,\n    Borough VARCHAR(50),\n    Zone VARCHAR(50),\n    service_zone VARCHAR(50)\n) AS [result_updated]\n\nDROP TABLE result\n\nSELECT name, collation_name from sys.databases;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyctaxitripdata",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
