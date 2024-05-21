@@ -1,0 +1,61 @@
+{
+	"name": "Streaming Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Notebook1",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/jaya.vejendla@in.ey.com/Streaming Databricks Notebook",
+					"baseParameters": {
+						"execution_message": "Jaya is a good boy"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Notebook1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "status_message",
+					"value": {
+						"value": "@activity('Notebook1').output.runOutput",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"status_message": {
+				"type": "String",
+				"defaultValue": "Yes"
+			}
+		},
+		"annotations": []
+	}
+}
